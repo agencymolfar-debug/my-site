@@ -198,7 +198,7 @@ const protectedRoutes = new Set(["POST /f1/bot-start", "POST /f1/video", "POST /
 let trackTpl = null;
 async function serveTrack(res) {
   trackTpl ??= await readFile(join(root, "assets", "track.src.js"), "utf8");
-  const js = trackTpl.replace("__PIXEL_ID__", PIXEL_ID).replace("__BOT__", BOT);
+  const js = trackTpl.replace("__PIXEL_ID__", PIXEL_ID).replace("__BOT__", BOT).replace("__FLOW__", process.env.BOT_START_FLOW_ID || "");
   res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "public, max-age=300" }).end(js);
 }
 
