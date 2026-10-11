@@ -3,6 +3,7 @@
 (function () {
   var PIXEL_ID = "__PIXEL_ID__";
   var BOT = "__BOT__";
+  var FLOW = "__FLOW__"; // SendPulse flow id launched by the button (empty = plain t.me deep link)
 
   // ---- Meta Pixel base code ----
   !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };
@@ -83,7 +84,12 @@
         var cd = { content_name: "hvco_market_2026", btn: btn };
         if (window.fbq && PIXEL_ID) fbq("track", "Contact", cd, { eventID: eventId });
         post("/f1/click", Object.assign(ctx(), { sid: s, eventId: eventId, btn: btn }));
-        var link = "https://t.me/" + BOT + "?start=" + s;
+        // SendPulse link: starts the welcome flow and saves sid (+ source) into the contact's variables
+        var link = FLOW
+          ? "https://tg.pulse.is/" + BOT + "?start=" + FLOW + "&sid=" + s + "&btn=" + encodeURIComponent(btn) +
+            (utm.utm_campaign ? "&utm_campaign=" + encodeURIComponent(utm.utm_campaign) : "") +
+            (utm.utm_medium ? "&utm_medium=" + encodeURIComponent(utm.utm_medium) : "")
+          : "https://t.me/" + BOT + "?start=" + s;
         setTimeout(function () { location.href = link; }, 150);
       });
     });
