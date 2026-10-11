@@ -9,7 +9,13 @@ const types = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": 
 const hidden = new Set(["server.js", "package.json"]);
 
 http.createServer(async (req, res) => {
-  let path = decodeURIComponent((req.url || "/").split("?")[0]);
+  const [rawPath, query] = (req.url || "/").split("?");
+  let path = decodeURIComponent(rawPath);
+  // "/listv1" -> "/listv1/" (keeps ?utm_...&fbclid=... so ad tracking survives the redirect)
+  if (!path.endsWith("/") && !extname(path)) {
+    res.writeHead(301, { Location: rawPath + "/" + (query ? "?" + query : "") }).end();
+    return;
+  }
   if (path.endsWith("/")) path += "index.html";
   const file = normalize(path).replace(/^([/\\])+/, "");
   if (file.includes("..") || file.startsWith(".") || hidden.has(file)) { res.writeHead(404).end("Not found"); return; }
