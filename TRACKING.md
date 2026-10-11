@@ -1,6 +1,6 @@
 # Трекінг: Meta Pixel + Conversions API
 
-Воронка: стаття `/listv1` → Telegram-бот (SendPulse) → лід → продаж. Кожна подія йде в Meta з максимумом параметрів.
+Воронка: стаття `/list1` → Telegram-бот (SendPulse) → лід → продаж. Кожна подія йде в Meta з максимумом параметрів.
 
 ## Railway → Variables
 

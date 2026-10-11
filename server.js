@@ -14,7 +14,7 @@ const types = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": 
 const hidden = new Set(["server.js", "capi.js", "store.js", "package.json", "package-lock.json", "TRACKING.md", "README.md"]);
 
 const PIXEL_ID = process.env.META_PIXEL_ID || "";
-const BOT = process.env.BOT_USERNAME || "YOUR_BOT";
+const BOT = process.env.BOT_USERNAME || "bonnsl_bot";
 const SECRET = process.env.WEBHOOK_SECRET || "";
 const CURRENCY = process.env.CURRENCY || "UAH";
 const LEAD_VALUE = Number(process.env.LEAD_VALUE || 0);
@@ -221,7 +221,9 @@ http.createServer(async (req, res) => {
 
   // ---------- static ----------
   let path = decodeURIComponent(url.pathname);
-  // "/listv1" -> "/listv1/" keeping ?utm_...&fbclid=... so ad tracking survives the redirect
+  // old article address -> /list1/
+  if (path === "/listv1" || path === "/listv1/") { res.writeHead(301, { Location: "/list1/" + url.search }).end(); return; }
+  // "/list1" -> "/list1/" keeping ?utm_...&fbclid=... so ad tracking survives the redirect
   if (!path.endsWith("/") && !extname(path)) {
     res.writeHead(301, { Location: url.pathname + "/" + url.search }).end();
     return;
